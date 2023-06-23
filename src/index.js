@@ -1,6 +1,8 @@
 import '../src/css/common.css';
 import { fetchBreeds, fetchCatByBreed } from '../src/cat-api.js';
 import Notiflix from 'notiflix';
+import SlimSelect from 'slim-select';
+import '/node_modules/slim-select/dist/slimselect.css';
 
 const breedSelectEl = document.querySelector('.breed-select');
 const catInfoEl = document.querySelector('.cat-info');
@@ -15,6 +17,9 @@ fetchBreeds()
       breedSelectEl.appendChild(optionEl);
       loaderEl.classList.add('hidden');
     });
+    new SlimSelect({
+      select: breedSelectEl,
+    });
   })
   .catch(error => {
     handleError(error);
@@ -27,12 +32,15 @@ breedSelectEl.addEventListener('change', e => {
       if (catData) {
         showCatInfo(catData);
       } else {
+        catInfoEl.classList.add('hidden');
         console.error('Error fetching cat data.');
       }
     })
     .catch(error => {
-      console.error(error);
+      handleError(error);
     });
+  loaderEl.classList.remove('hidden');
+  catInfoEl.classList.add('hidden');
 });
 
 function showCatInfo(catData) {
@@ -48,22 +56,9 @@ function showCatInfo(catData) {
   catInfoEl.classList.remove('hidden');
 }
 
-const handleError = error => {
+const handleError = () => {
   loaderEl.classList.add('hidden');
   Notiflix.Notify.failure(
     'Oops! Something went wrong! Try reloading the page!'
   );
-};
-
-const handleBreedSelectChange = async () => {
-  const selectedBreedId = breedSelectEl.value;
-
-  if (!selectedBreedId) {
-    catInfoEl.innerHTML = '';
-    catInfoEl.classList.add('hidden');
-    return;
-  }
-
-  loaderEl.classList.remove('hidden');
-  catInfoEl.classList.add('hidden');
 };

@@ -8,7 +8,7 @@ export function fetchBreeds() {
     })
     .then(data => data.map(breed => ({ id: breed.id, name: breed.name })))
     .catch(error => {
-      console.error(error);
+      handleError(error);
       return [];
     });
 }
@@ -28,7 +28,7 @@ export function fetchCatByBreed(breedId) {
     })
     .then(data => data[0])
     .catch(error => {
-      console.error(error);
+      handleError(error);
       return null;
     });
 }
