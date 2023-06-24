@@ -33,7 +33,8 @@ breedSelectEl.addEventListener('change', e => {
         showCatInfo(catData);
       } else {
         catInfoEl.classList.add('hidden');
-        console.error('Error fetching cat data.');
+        loaderEl.classList.add('hidden');
+        handleError(error);
       }
     })
     .catch(error => {
